@@ -10,10 +10,15 @@
 class P2PNode: public BaseServer {
 private:
     void handleClient(int conn_fd) override;
-    void recieveListener(int conn_fd);
+
+    void receiveListener(int conn_fd);
+
     void sendListener(int conn_fd);
+
 public:
     P2PNode(uint16_t port);
+    std::string currentInput;
+    std::mutex inputMutex;
 };
 
 

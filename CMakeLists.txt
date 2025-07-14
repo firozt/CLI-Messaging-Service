@@ -10,7 +10,9 @@ file(GLOB_RECURSE SOURCES
 )
 
 # Add main.cpp
-set(SOURCES ${SOURCES} ${PROJECT_SOURCE_DIR}/main.cpp)
+set(SOURCES ${SOURCES} ${PROJECT_SOURCE_DIR}/main.cpp
+        src/utils/TerminalInput.cpp
+        src/utils/TerminalInput.h)
 
 # Create the executable
 add_executable(p2p-messenger ${SOURCES})
