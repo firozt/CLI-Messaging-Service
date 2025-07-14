@@ -4,11 +4,9 @@
 
 #include "P2PNode.h"
 #include <iostream>
-#include <unistd.h>   // for read(), write(), close()
-#include <cstring>    // for strlen()
+#include <unistd.h> 
 #include <thread>
 #include <sys/socket.h>
-#include <termios.h>
 
 #include <utils/TerminalInput.h>
 
