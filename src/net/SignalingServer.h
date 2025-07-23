@@ -4,10 +4,9 @@
 
 #ifndef SIGNALINGSERVER_H
 #define SIGNALINGSERVER_H
-#include "BaseServer.h"
 
 
-class SignalingServer: public BaseServer{
+class SignalingServer{
     SignalingServer();
 };
 

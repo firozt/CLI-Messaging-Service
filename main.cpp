@@ -13,6 +13,7 @@ int main() {
     P2PNode node(8892);
 
     node.run();
+    cout << "listening on port 8892" << endl;
 
     disableRawMode();
     return 1;
