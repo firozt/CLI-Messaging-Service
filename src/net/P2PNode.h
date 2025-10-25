@@ -14,6 +14,8 @@ private:
 
 public:
     P2PNode(uint16_t port);
+    std::string cur_input;
+
     void run();
     uint16_t port;
     std::string get_ip_input(std::string input);
@@ -25,6 +27,7 @@ private:
     int create_socket(sockaddr_in& address, int addr_len);
     int listen_loop(int socket_fd, sockaddr_in &address, int addr_len);
     int send_loop(int socket_fd, sockaddr_in &address, int addr_len);
+    void print_incoming(const std::string &msg, const std::string &cur_input);
 
 };
 
