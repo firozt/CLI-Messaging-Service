@@ -27,7 +27,6 @@ private:
     int create_socket(sockaddr_in& address, int addr_len);
     int listen_loop(int socket_fd, sockaddr_in &address, int addr_len);
     int send_loop(int socket_fd, sockaddr_in &address, int addr_len);
-    void print_incoming(const std::string &msg, const std::string &cur_input);
 
 };
 

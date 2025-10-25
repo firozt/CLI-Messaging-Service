@@ -9,7 +9,6 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
-
 #include "utils/TerminalInput.h"
 
 
@@ -116,41 +115,32 @@ int P2PNode::listen_loop(int socket_fd, sockaddr_in &address, int addr_len) {
 }
 
 int P2PNode::send_loop(int socket_fd, sockaddr_in &address, int addr_len) {
-    enableRawMode();  // raw mode
+    // TODO MAKE READING INPUT BLOCKING
+    enableRawMode();
 
     while (true) {
+        std::cout << "\rYou: " + cur_input << std::flush;
         int c = readUserInputChar(this->cur_input);
         if (c == -1) continue;  // no input yet
-
-        if (c == '\n') {  // Enter pressed
-            if (this->cur_input.empty()) continue;
-
-            try {
-                sockaddr_in dest_addr{};
-                dest_addr.sin_family = AF_INET;
-                dest_addr.sin_port = htons(get_port_input(this->cur_input));
-                inet_pton(AF_INET, get_ip_input(this->cur_input).c_str(), &dest_addr.sin_addr);
-
-                std::string msg = extract_msg(this->cur_input);
-
-                ssize_t sent = sendto(socket_fd,
-                                      msg.c_str(),
-                                      msg.size(),
-                                      0,
-                                      (struct sockaddr*)&dest_addr,
-                                      sizeof(dest_addr));
-                if (sent < 0) perror("sendto failed");
-
-            } catch (const std::exception &e) {
-                std::cerr << "\nInput error: " << e.what() << std::endl;
-            }
-
-            this->cur_input.clear();
-            std::cout << "\rYou: " << std::flush;
-
-        } else if (c > 0) {
-            // append character and echo
+        if (c > 0 ) {
             this->cur_input.push_back((char)c);
+        }
+        if (c == '\n') {  // Enter pressed
+            sockaddr_in dest_addr{};
+            dest_addr.sin_family = AF_INET;
+            dest_addr.sin_port = htons(get_port_input(this->cur_input));
+            inet_pton(AF_INET, get_ip_input(this->cur_input).c_str(), &dest_addr.sin_addr);
+
+            std::string msg = extract_msg(this->cur_input);
+
+            ssize_t sent = sendto(socket_fd,
+                                  msg.c_str(),
+                                  msg.size(),
+                                  0,
+                                  (struct sockaddr*)&dest_addr,
+                                  sizeof(dest_addr));
+            if (sent < 0) perror("sendto failed");
+            this->cur_input.clear();
         }
     }
 }
@@ -188,8 +178,3 @@ std::string P2PNode::extract_msg(std::string input) {
 
 }
 
-void P2PNode::print_incoming(const std::string &msg, const std::string &cur_input) {
-    std::cout << "\r\033[K";           // clear current line
-    std::cout << msg << std::endl;     // print incoming message
-    std::cout << "You: " << cur_input << std::flush; // restore prompt
-}

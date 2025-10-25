@@ -42,3 +42,9 @@ int readUserInputChar(std::string& currentInput) {
     std::cout << c << std::flush;
     return static_cast<unsigned char>(c);
 }
+
+void print_incoming(const std::string &msg, const std::string &cur_input) {
+    std::cout << "\r\033[K";           // clear current line
+    std::cout << msg << std::endl;     // print incoming message
+    std::cout << "You: " << cur_input << std::flush; // restore prompt
+}
